@@ -24,6 +24,7 @@ const batch = [valid1, valid2, valid3, valid4, valid5, invalid1, invalid2, inval
 
 
 // Add your functions below:
+// MAIN FUNCTION: 
 // Validate numbers based on Luhn Algorithm. Return true if valid, false if not valid:
 const validateCred = card => {
     // Reverse the order of the card
@@ -65,6 +66,7 @@ const validateCred = card => {
     }
 }
 
+// MAIN FUNCTION:
 // Take a nested array of credit card numbers and return another array of invalid cards:
 const findInvalidCards = creditBatch => {
     const invalidCards = [];
@@ -73,13 +75,44 @@ const findInvalidCards = creditBatch => {
             invalidCards.push(card);
         }
     });
-
     return invalidCards;
 }
 
-// Test Functions
-findInvalidCards(batch);
+// MAIN FUNCTION:
+// Takes in nested array of invalid numbers and returns an array of unique companies
+const idInvalidCardCompanies = invalidCards => {
+    const companies = [];
+    let uniqueCompanies = [];
 
+    invalidCards.forEach(card => {
+        const firstDigit = card[0];
+        
+        switch(firstDigit) {
+            case 3:
+                companies.push("Amex (American Express)");
+                break;
+            case 4:
+                companies.push("Visa");
+                break;
+            case 5:
+                companies.push("Mastercard");
+                break;
+            case 6:
+                companies.push("Discover");
+                break;
+            default:
+                companies.push("Company Not Found");
+                break;
+        }
+    })
+
+    uniqueCompanies = [...new Set(companies)];
+    return uniqueCompanies;
+}
+
+// Test Functions
+const invalids = findInvalidCards(batch);
+idInvalidCardCompanies(invalids);
 
 
 
