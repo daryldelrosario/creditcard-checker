@@ -24,6 +24,58 @@ const batch = [valid1, valid2, valid3, valid4, valid5, invalid1, invalid2, inval
 
 
 // Add your functions below:
+// Validate numbers based on Luhn Algorithm. Return true if valid, false if not valid
+const validateCred = card => {
+    // Reverse the order of the card
+    const reverseOrder = card.reverse();
+    const everyOtherDigit = [];
+    const untouched = [];
+    let theSums = 0;
+
+    // Debug
+    console.log("The reverse order is: " + reverseOrder.join(""));
+
+    // Every other digit is doubled. If number greater than 9 after doubling, substract 9 from value
+    for(let i = 0; i < reverseOrder.length; i++) {
+        i++;
+        let luhnDoubled = reverseOrder[i] * 2;
+
+        if(luhnDoubled > 9) {
+            luhnDoubled -= 9;
+            everyOtherDigit.push(luhnDoubled);
+        } else {
+            everyOtherDigit.push(luhnDoubled);
+        }
+    }
+
+    console.log("Every other digit is: " + everyOtherDigit.join(" "));
+
+    // Sum all digits in credit card
+    // Gather the remaining digits that weren't doubled
+    for(let i = 0; i < reverseOrder.length; i++) {
+        untouched.push(reverseOrder[i]);
+        i++;
+    }
+    console.log("The untouched are: " + untouched.join(""));
+
+    // Add every other doubled digit [Luhn Algo] with the untouched digits
+    theSums = everyOtherDigit.reduce((a, b) => a + b) + untouched.reduce((a, b) => a + b);
+    console.log(theSums);
+
+    // If sum modulo 10 is 0, number is valid. Otherwise, invalid
+    if(theSums % 10 === 0) {
+        console.log("Valid credit card number.");
+        return true;
+    } else {
+        console.log("Invalid credit card number.");
+        return false;
+    }
+
+}
+
+// Test Functions
+console.log("The invalid5 card is: " + invalid5.join(""));
+validateCred(invalid5);
 
 
 
