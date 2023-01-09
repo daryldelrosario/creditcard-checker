@@ -27,8 +27,10 @@ const batch = [valid1, valid2, valid3, valid4, valid5, invalid1, invalid2, inval
 // MAIN FUNCTION: 
 // Validate numbers based on Luhn Algorithm. Return true if valid, false if not valid:
 const validateCred = card => {
+    console.log("Card number: " + card.join(""));
     // Reverse the order of the card
-    const reverseOrder = card.reverse();
+    const reverseOrder = card.slice().sort((a, b) => b - a);
+    console.log(reverseOrder);
     const everyOtherDigit = [];
     const untouched = [];
     let theSums = 0;
@@ -60,8 +62,10 @@ const validateCred = card => {
 
     // If sum modulo 10 is 0, number is valid. Otherwise, invalid
     if(theSums % 10 === 0) {
+        console.log("Valid");
         return true;
     } else {
+        console.log("INVALID");
         return false;
     }
 }
@@ -111,8 +115,11 @@ const idInvalidCardCompanies = invalidCards => {
 }
 
 // Test Functions
-const invalids = findInvalidCards(batch);
-idInvalidCardCompanies(invalids);
+console.log(validateCred(valid3)); // should print true
+console.log(validateCred(invalid3)); // should print false
+console.log(findInvalidCards(batch));
+
+console.log(validateCred(valid1));
 
 
 
