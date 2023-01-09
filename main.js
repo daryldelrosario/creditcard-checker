@@ -24,109 +24,108 @@ const batch = [valid1, valid2, valid3, valid4, valid5, invalid1, invalid2, inval
 
 
 // Add your functions below:
-// MAIN FUNCTION: 
-// Validate numbers based on Luhn Algorithm. Return true if valid, false if not valid:
-const validateCred = card => {
-    console.log("Card number: " + card.join(""));
-    // Reverse the order of the card
-    const reverseOrder = card.slice().sort((a, b) => b - a);
-    console.log(reverseOrder);
+// MAIN FUNCTION: validate credit card number via Luhn Algorithm. If valid, return true. Otherwise return false.
+const validateCred = credCard => {
+    // Start from farthest digit and iterate to the left
+    const reverseOrder = credCard.slice().reverse();
     const everyOtherDigit = [];
     const untouched = [];
-    let theSums = 0;
+    theSums = 0;
 
-    // Every other digit is doubled. If number greater than 9 after doubling, substract 9 from value
-    for(let i = 0; i < reverseOrder.length; i++) {
+    // Every other digit is doubled. If greater than 9 after doubling, subtract 9 from value
+    for(let i = 0; i < credCard.length; i++) {
         i++;
-        let luhnDoubled = reverseOrder[i] * 2;
-
-        if(luhnDoubled > 9) {
-            luhnDoubled -= 9;
-            everyOtherDigit.push(luhnDoubled);
-        } else if(luhnDoubled <= 9) {
-            everyOtherDigit.push(luhnDoubled);
+        let doubled = (reverseOrder[i] * 2);
+        if(doubled > 9) {
+            doubled -= 9;
+            everyOtherDigit.push(doubled);
+        } else if(doubled <= 9) {
+            everyOtherDigit.push(doubled);
         } else {
             continue;
         }
     }
 
-    // Sum all digits in credit card:
-    // Gather the remaining digits that weren't doubled
-    for(let i = 0; i < reverseOrder.length; i++) {
+    // Sum all the digits in credit card via Luhn Algo Double Digits and Untouched Digits:
+    // Gather Untouched Digits
+    for(let i = 0; i < credCard.length; i++) {
         untouched.push(reverseOrder[i]);
         i++;
     }
 
-    // Add every other doubled digit [Luhn Algo] with the untouched digits
+    // Add Luhn Algo Double Digits with Untouched Digits
     theSums = everyOtherDigit.reduce((a, b) => a + b) + untouched.reduce((a, b) => a + b);
 
-    // If sum modulo 10 is 0, number is valid. Otherwise, invalid
+    // If sum modulo 10 is 0 then card is valid. Otherwise invalid
     if(theSums % 10 === 0) {
-        console.log("Valid");
         return true;
     } else {
-        console.log("INVALID");
         return false;
     }
 }
 
-// MAIN FUNCTION:
-// Take a nested array of credit card numbers and return another array of invalid cards:
-const findInvalidCards = creditBatch => {
-    const invalidCards = [];
-    creditBatch.forEach(card => {
-        if(!(validateCred(card))) {
+// MAIN FUNCTION: check through nested arrays for invalid credit cards. Return an array of invalid cards.
+const findInvalidCards = bunchOfCards => {
+    const invalidCards = []
+    let counter = 0;
+
+    bunchOfCards.forEach(card => {
+        if(!validateCred(card)) {
             invalidCards.push(card);
-        }
-    });
-    return invalidCards;
-}
-
-// MAIN FUNCTION:
-// Takes in nested array of invalid numbers and returns an array of unique companies
-const idInvalidCardCompanies = invalidCards => {
-    const companies = [];
-    let uniqueCompanies = [];
-
-    invalidCards.forEach(card => {
-        const firstDigit = card[0];
-        
-        switch(firstDigit) {
-            case 3:
-                companies.push("Amex (American Express)");
-                break;
-            case 4:
-                companies.push("Visa");
-                break;
-            case 5:
-                companies.push("Mastercard");
-                break;
-            case 6:
-                companies.push("Discover");
-                break;
-            default:
-                companies.push("Company Not Found");
-                break;
+            counter++;
         }
     })
 
-    uniqueCompanies = [...new Set(companies)];
+    return invalidCards;
+}
+
+// MAIN FUNCTION: return an array of companies that mailed out invalid numbers. NO DUPLICATE companies.
+const idInvalidCardCompanies = batchInvalidCards => {
+    const invalidCompanies = [];
+    let uniqueCompanies = [];
+
+    batchInvalidCards.forEach(card => {
+        let firstDigit = card[0];
+        
+        switch(firstDigit) {
+            case 3:
+                invalidCompanies.push("Amex(American Express)");
+                break;
+            case 4:
+                invalidCompanies.push("Visa");
+                break;
+            case 5:
+                invalidCompanies.push("Mastercard");
+                break;
+            case 6:
+                invalidCompanies.push("Discover");
+                break;
+            default:
+                invalidCompanies.push("Company not found");
+                break;
+        }
+    })
+    
+    uniqueCompanies = [...new Set(invalidCompanies)];
+    console.log(uniqueCompanies.join(" "));
     return uniqueCompanies;
 }
 
-// Test Functions
-console.log(validateCred(valid3)); // should print true
-console.log(validateCred(invalid3)); // should print false
-console.log(findInvalidCards(batch));
 
-console.log(validateCred(valid1));
+// Test function
+console.log("=== validateCred Test ===");
+console.log(validateCred(valid5)); // should return true
 
+console.log("");
+console.log("=== findInvalidCards Test ===");
+const invalidCards = findInvalidCards(batch); // should return 8 invalid cards
+const numInvalidCards = invalidCards.length;
+console.log("There are " + numInvalidCards + " invalid cards: ");
+invalidCards.forEach(card => {
+    console.log(card.join(""));
+})
 
-
-
-
-
-
-
-
-
+console.log("");
+console.log("=== idInvalidCardCompanies Test ===");
+let invalidCardBatch = findInvalidCards(batch); // should return all companies once
+idInvalidCardCompanies(invalidCardBatch);
