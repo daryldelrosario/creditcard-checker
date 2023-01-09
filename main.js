@@ -32,8 +32,6 @@ const validateCred = card => {
     const untouched = [];
     let theSums = 0;
 
-    // console.log(card.join(""));
-
     // Every other digit is doubled. If number greater than 9 after doubling, substract 9 from value
     for(let i = 0; i < reverseOrder.length; i++) {
         i++;
@@ -56,39 +54,25 @@ const validateCred = card => {
         i++;
     }
 
-    // console.log("The doubled are: " + everyOtherDigit.join(" "));
-    // console.log("The untouched are: " + untouched.join(" "));
-
     // Add every other doubled digit [Luhn Algo] with the untouched digits
     theSums = everyOtherDigit.reduce((a, b) => a + b) + untouched.reduce((a, b) => a + b);
-    // console.log(theSums);
 
     // If sum modulo 10 is 0, number is valid. Otherwise, invalid
     if(theSums % 10 === 0) {
-        console.log("Valid credit card number.");
         return true;
     } else {
-        console.log("Invalid credit card number.");
         return false;
     }
 }
 
-// Takes a nested array of credit card numbers and returns another array of invalid cards:
+// Take a nested array of credit card numbers and return another array of invalid cards:
 const findInvalidCards = creditBatch => {
     const invalidCards = [];
-    let counter = 0;
     creditBatch.forEach(card => {
         if(!(validateCred(card))) {
             invalidCards.push(card);
-            counter++;
         }
     });
-
-    invalidCards.forEach(card => {
-        console.log(card.join(""));
-    })
-
-    console.log(counter);
 
     return invalidCards;
 }
