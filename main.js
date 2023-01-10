@@ -92,6 +92,7 @@ const idInvalidCardCompanies = batchInvalidCards => {
 
 // PROJECT EXTENSION
 // EXTENSION FUNCTION: takes a credit card string and converts into array of numbers.
+// Find credit card numbers to test here: https://www.freeformatter.com/credit-card-number-generator-validator.html
 const convertToArr = credStr => {
     const credArr = credStr.split("");
 
