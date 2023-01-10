@@ -26,42 +26,21 @@ const batch = [valid1, valid2, valid3, valid4, valid5, invalid1, invalid2, inval
 // Add your functions below:
 // MAIN FUNCTION: validate credit card number via Luhn Algorithm. If valid, return true. Otherwise return false.
 const validateCred = credCard => {
-    // Start from farthest digit and iterate to the left
-    const reverseOrder = credCard.slice().reverse();
-    const everyOtherDigit = [];
-    const untouched = [];
-    let theSums = 0;
+    let sum = 0;
+    let cardLength = credCard.length;
+    let doubleFactor = cardLength % 2;
 
-    // Every other digit is doubled. If greater than 9 after doubling, subtract 9 from value
-    for(let i = 0; i < credCard.length; i++) {
-        i++;
-        let doubled = (reverseOrder[i] * 2);
-        if(doubled > 9) {
-            doubled -= 9;
-            everyOtherDigit.push(doubled);
-        } else if(doubled <= 9) {
-            everyOtherDigit.push(doubled);
-        } else {
-            continue;
+    for(let i = 0; i < cardLength; i++) {
+        let thisDigit = parseInt(credCard[i]);
+        if(i % 2 === doubleFactor) {
+            thisDigit *= 2;
+            if (thisDigit > 9) {
+                thisDigit -= 9;
+            }
         }
+        sum += thisDigit;
     }
-
-    // Sum all the digits in credit card via Luhn Algo Double Digits and Untouched Digits:
-    // Gather Untouched Digits
-    for(let i = 0; i < credCard.length; i++) {
-        untouched.push(reverseOrder[i]);
-        i++;
-    }
-
-    // Add Luhn Algo Double Digits with Untouched Digits
-    theSums = everyOtherDigit.reduce((a, b) => a + b) + untouched.reduce((a, b) => a + b);
-
-    // If sum modulo 10 is 0 then card is valid. Otherwise invalid
-    if(theSums % 10 === 0) {
-        return true;
-    } else {
-        return false;
-    }
+    return (sum % 10) === 0;
 }
 
 // MAIN FUNCTION: check through nested arrays for invalid credit cards. Return an array of invalid cards.
@@ -123,7 +102,7 @@ const convertToArr = credStr => {
 // EXTENSION FUNCTION: converts invalid numbers into valid numbers.
 const convertToValid = invalidNumber => {
     // Reverse the order of the digits
-    const reversed = invalidNumber.toString().split('').reverse();
+    const reversed = invalidNumber.reverse();
   
     // Double every other digit starting from the second last digit
     const doubled = reversed.map((digit, index) => {
@@ -134,7 +113,7 @@ const convertToValid = invalidNumber => {
         }
         return result;
       }
-      return parseInt(digit);
+      return digit;
     });
   
     // Sum the doubled digits and the undoubled digits
@@ -144,97 +123,9 @@ const convertToValid = invalidNumber => {
     const checkDigit = sum % 10 === 0 ? 0 : 10 - (sum % 10);
   
     // Return the valid number
-    return checkDigit === 0 ? invalidNumber : invalidNumber * 10 + checkDigit;
+    const validNumber = invalidNumber.concat(checkDigit).join('');
+    return validNumber;
   }
-  
-/*
-const convertInvalidToValid = invalidCard => {
-    const reverseOrder = invalidCard.slice().reverse();
-    console.log(reverseOrder.join(""));
-
-    const everyOtherDigit = [];
-    const untouched = [];
-    let theSums = 0;
-    let theFix = 0;
-
-    let j = 0;
-    for(let i = 0; i <= invalidCard.length; i+=2) {
-        let doubled = (reverseOrder[j] * 2);
-        if(doubled > 9) {
-            doubled -= 9;
-            everyOtherDigit.push(doubled);
-        } else if(doubled <= 9) {
-            everyOtherDigit.push(doubled);
-        } else {
-            continue;
-        }
-        j++;
-    }
-    console.log(everyOtherDigit.join(" "));
-
-    for(let i = 0; i <= invalidCard.length; i++) {
-        if(reverseOrder[i]) {
-            untouched.push(reverseOrder[i]);
-            i++;
-        } else {
-            continue;
-        } 
-    }
-    console.log(untouched);
-    console.log(untouched.join(" "));
-
-    let sumDoubles = everyOtherDigit.reduce((a, b) => a + b);
-    console.log("Every Other Digit: " + sumDoubles);
-
-    let sumOthers = untouched.reduce((a, b) => a + b);
-    console.log("Regular Digits: " + sumOthers);
-
-    theSums = everyOtherDigit.reduce((a, b) => a + b) + untouched.reduce((a, b) => a + b);
-    console.log(theSums);
-
-    theFix = 10 - (theSums % 10);
-    console.log(theFix);
-
-    const newCard = [];
-    let fixCounter = theFix;
-
-    let i = invalidCard.length - 1;
-/*
-    while(fixCounter > 0) {
-        if(i % 2 === 1 && invalidCard[i] <= 8) {
-            newCard.unshift(invalidCard[i] + 1);
-            fixCounter--;
-        } else {
-            newCard.unshift(invalidCard[i]);
-        }
-        i--;       
-    }
-*/
-
-    /*
-    for(let i = invalidCard.length - 1; i >= 0; i--) {
-        if(i % 2 === 1 && fixCounter > 3 && invalidCard[i] <= 6) {
-            newCard.unshift(invalidCard[i] + 3);
-            fixCounter -= 3;
-        } else if(i % 2 === 1 && fixCounter > 2 && invalidCard[i] <= 7) {
-            newCard.unshift(invalidCard[i] + 2);
-            fixCounter -= 2;
-        } else if(i % 2 === 1 && fixCounter > 1 && invalidCard[i] <= 8) {
-            newCard.unshift(invalidCard[i] + 1);
-            fixCounter --;
-        } else {
-            newCard.unshift(invalidCard[i]);
-        }
-    }
-
-    
-
-    console.log(newCard.join(""));
-    return newCard;
-
-}
-*/
-
 
 // HELPER FUNCTIONS
 const convertArrToCard = arr => {
@@ -242,7 +133,6 @@ const convertArrToCard = arr => {
 }
 
 // Test function
-/*
 console.log("=== validateCred Test ===");
 console.log(validateCred(valid5)); // should return true
 
@@ -267,18 +157,20 @@ console.log("Credit card number to check: " + credNumToTest);
 let validTest = convertToArr(credNumToTest); // should return argument in an array of numbers
 console.log(validTest);
 console.log(validateCred(validTest)); // should return true
-*/
 
 console.log("");
 console.log("=== EXTENSION TEST: Convert invalid credit card into valid ===");
-credNumToTest = "5795593392134643"; //
+credNumToTest = "4532778771091795"; //
 console.log("Credit card number to check: " + credNumToTest);
 let invalidTest = convertToArr(credNumToTest);
 console.log(invalidTest);
 console.log(validateCred(invalidTest)); // should return false
 
 let testNewCard = convertToValid(invalidTest);
+console.log(testNewCard);
+console.log("The new card is: " + testNewCard);
 console.log(validateCred(testNewCard));
+
 
 console.log(convertArrToCard(invalid1));
 console.log(convertArrToCard(invalid2));
