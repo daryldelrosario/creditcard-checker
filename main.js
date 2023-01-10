@@ -111,8 +111,22 @@ const idInvalidCardCompanies = batchInvalidCards => {
     return uniqueCompanies;
 }
 
+// PROJECT EXTENSION
+// EXTENSION FUNCTION: takes a credit card string and converts into array of numbers.
+const convertToArr = credStr => {
+    const credArr = credStr.split("");
+
+    const number = credArr.map(char => parseInt(char, 10));
+    return number;
+}
+
+// EXTENSION FUNCTION: converts invalid numbers into valid numbers.
+const convertInvalidToValid = invalidArr => {
+    
+}
 
 // Test function
+/*
 console.log("=== validateCred Test ===");
 console.log(validateCred(valid5)); // should return true
 
@@ -129,3 +143,22 @@ console.log("");
 console.log("=== idInvalidCardCompanies Test ===");
 let invalidCardBatch = findInvalidCards(batch); // should return all companies once
 idInvalidCardCompanies(invalidCardBatch);
+*/
+
+console.log("");
+console.log("=== EXTENSION TEST: Convert string to array of numbers ===");
+let credNumToTest = "5503653492260366"; // credit card number MUST be a string. Please surround variable in ""
+console.log("Credit card number to check: " + credNumToTest);
+let validTest = convertToArr(credNumToTest); // should return argument in an array of numbers
+console.log(validTest);
+console.log(validateCred(validTest)); // should return true
+
+console.log("");
+console.log("=== EXTENSION TEST: Convert invalid credit card into valid ===");
+credNumToTest = "4532778771091795"; //
+console.log("Credit card number to check: " + credNumToTest);
+validTest = convertToArr(credNumToTest);
+console.log(validTest);
+console.log(validateCred(validTest)); // should return false
+
+
