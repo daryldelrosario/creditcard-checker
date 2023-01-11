@@ -92,39 +92,36 @@ const idInvalidCardCompanies = batchInvalidCards => {
 
 // PROJECT EXTENSION
 // EXTENSION FUNCTION: takes a credit card string and converts into array of numbers.
-// Find credit card numbers to test here: https://www.freeformatter.com/credit-card-number-generator-validator.html
 const convertToArr = credStr => {
     const credArr = credStr.split("");
-
     const number = credArr.map(char => parseInt(char, 10));
     return number;
 }
 
 // EXTENSION FUNCTION: converts invalid numbers into valid numbers.
 const convertToValid = invalidNumber => {
-    // Reverse the order of the digits
-    const reversed = invalidNumber.reverse();
-  
-    // Double every other digit starting from the second last digit
-    const doubled = reversed.map((digit, index) => {
-      if (index % 2 === 1) {
-        let result = digit * 2;
-        if (result > 9) {
-          result -= 9;
+    console.log("");
+    console.log("Converting " + invalidNumber.join("") + " into a valid credit card number ... ");
+    let theSum = 0;
+    let theCardLength = invalidNumber.length;
+    let theDoubleFactor = theCardLength % 2;
+
+    for(let i = 0; i < theCardLength; i++) {
+        let theDigit = parseInt(invalidNumber[i]);
+        if(i % 2 === theDoubleFactor) {
+            theDigit *= 2;
+            if(theDigit > 9) {
+                theDigit -= 9;
+            }
         }
-        return result;
-      }
-      return digit;
-    });
-  
-    // Sum the doubled digits and the undoubled digits
-    const sum = doubled.reduce((total, digit) => total + digit);
+        theSum += theDigit;
+    }
   
     // Calculate the check digit
-    const checkDigit = sum % 10 === 0 ? 0 : 10 - (sum % 10);
+    const checkDigit = theSum % 10 === 0 ? 0 : 10 - (theSum % 10);
   
     // Return the valid number
-    const validNumber = invalidNumber.concat(checkDigit).join('');
+    const validNumber = invalidNumber.concat("0" + checkDigit).join('');
     return validNumber;
   }
 
@@ -133,51 +130,57 @@ const convertArrToCard = arr => {
     return arr.join("");
 }
 
+const printHeader = str => {
+    let strLength = str.length;
+    console.log("=".repeat(strLength));
+    console.log(str);
+    console.log("=".repeat(strLength));
+}
+
 // Test function
-console.log("=== validateCred Test ===");
+printHeader("=== FUNCTION TEST: validateCred() ===");
 console.log(validateCred(valid5)); // should return true
 
 console.log("");
-console.log("=== findInvalidCards Test ===");
+printHeader("=== FUNCTION TEST: findInvalidCards() ===");
 const invalidCards = findInvalidCards(batch); // should return 8 invalid cards
 const numInvalidCards = invalidCards.length;
 console.log("There are " + numInvalidCards + " invalid cards: ");
-invalidCards.forEach(card => {
-    console.log(card.join(""));
-})
+
+// === UNCOMMENT BELOW TO REVEAL INVALID CARDS ===
+// invalidCards.forEach(card => {
+//     console.log(card.join(""));
+// })
 
 console.log("");
-console.log("=== idInvalidCardCompanies Test ===");
+printHeader("=== FUNCTION TEST: idInvalidCardCompanies() ===");
 let invalidCardBatch = findInvalidCards(batch); // should return all companies once
 idInvalidCardCompanies(invalidCardBatch);
 
 console.log("");
-console.log("=== EXTENSION TEST: Convert string to array of numbers ===");
-let credNumToTest = "5503653492260366"; // credit card number MUST be a string. Please surround variable in ""
+printHeader("=== EXTENSION TEST: Convert string to array of numbers ===");
+let credNumToTest = "371612019985236"; // credit card number MUST be a string. Please surround variable in ""
 console.log("Credit card number to check: " + credNumToTest);
 let validTest = convertToArr(credNumToTest); // should return argument in an array of numbers
-console.log(validTest);
 console.log(validateCred(validTest)); // should return true
 
 console.log("");
-console.log("=== EXTENSION TEST: Convert invalid credit card into valid ===");
-credNumToTest = "4532778771091795"; //
+printHeader("=== EXTENSION TEST: Convert invalid credit card into valid ===");
+credNumToTest = "6011377020962656203"; //
 console.log("Credit card number to check: " + credNumToTest);
 let invalidTest = convertToArr(credNumToTest);
-console.log(invalidTest);
 console.log(validateCred(invalidTest)); // should return false
 
 let testNewCard = convertToValid(invalidTest);
-console.log(testNewCard);
 console.log("The new card is: " + testNewCard);
-console.log(validateCred(testNewCard));
+console.log(validateCred(testNewCard)); // should return true
 
+// RESOURCES
+console.log("");
+printHeader("=== RESOURCES ===")
+console.log("Find credit card numbers to test here: https://www.freeformatter.com/credit-card-number-generator-validator.html");
+console.log("Validate credit cards here: https://www.validcreditcardnumber.com/");
 
-console.log(convertArrToCard(invalid1));
-console.log(convertArrToCard(invalid2));
-console.log(convertArrToCard(invalid3));
-console.log(convertArrToCard(invalid4));
-console.log(convertArrToCard(invalid5));
 
 
 
