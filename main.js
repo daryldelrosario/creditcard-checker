@@ -180,9 +180,3 @@ console.log("");
 printHeader("=== RESOURCES ===")
 console.log("Find credit card numbers to test here: https://www.freeformatter.com/credit-card-number-generator-validator.html");
 console.log("Validate credit cards here: https://www.validcreditcardnumber.com/");
-
-
-
-
-
-
