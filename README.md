@@ -10,11 +10,11 @@ Using JavaScript to validate credit card numbers
     * `node main.js` to run application
 
 ## Features
-* complete code for main functions:
+* completed code for main functions:
     * validateCred(`credNumArr`)
     * findInvalidCards(`credNumArrBatch`)
     * idInvalidCardCompanies(`invalidCredNumArrBatch`)
-* complete code for extended functions:
+* completed code for extended functions:
     * convertToArr(`credNumStr`);
     * convertToValid(`invalidCredNumStr`);
-* functions tested and passed
+* all functions tested and passed
