@@ -5,9 +5,8 @@ Using JavaScript to validate credit card numbers
 <kbd><img src="cc-checker-live.gif" alt="credit card checker code demo"></kbd>
 
 ## Instructions
-* must have Node.js installed
-* through terminal enter:
-    * `node main.js` to run application
+* this code demo uses Node.js
+* ran via terminal through command `node main.js` 
 
 ## Features
 * completed code for main functions:
